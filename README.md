@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# notion-next
 
 ## Getting Started
 
@@ -11,15 +11,15 @@ NOTION_SECRET=secret_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 Then, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
 bun dev
 ```
 
 ## Notes
 
 - https://github.com/NotionX/react-notion-x
+- Grab page data for multiple IDs
+  - Parallelize with Promise.all
+- Store block/page data in object with page ID as key
+- Render all images for all pages
+- Use fetch for now. SWR can wait
+- Handle pagination when page_data has next_cursor
