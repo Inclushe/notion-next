@@ -6,16 +6,26 @@ const notion = new Client({
 
 export async function GET(request) {
 	const { searchParams } = new URL(request.url);
-	let blockId = searchParams.get("id");
+	const blockIds = searchParams.get("ids");
+	const blockPromises = blockIds.split(",").map((id) => {
+		return new Promise((resolve, reject) => {
+			resolve(getPageDataFromID(id));
+		});
+	});
+	const allResults = await Promise.all(blockPromises);
+	return Response.json(allResults);
+}
+
+async function getPageDataFromID(id) {
 	let response = await notion.blocks.children.list({
-		block_id: blockId,
+		block_id: id,
 		page_size: 50,
 	});
-	blockId = response.results[0].id;
+	const newId = response.results[0].id;
 	response = await notion.blocks.children.list({
-		block_id: blockId,
+		block_id: newId,
 		page_size: 50,
 	});
 	const results = response.results;
-	return Response.json(results);
+	return results;
 }

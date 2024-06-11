@@ -5,7 +5,7 @@ import React from "react";
 import useSWR from "swr";
 
 const PAGE_ENDPOINT = "/api/notion/mock";
-const BLOCK_ENDPOINT = "/api/notion/getPageData";
+const BLOCK_ENDPOINT = "/api/notion/mock/getPageData";
 
 async function pageFetcher(endpoint) {
 	const response = await fetch(endpoint);
@@ -15,7 +15,7 @@ async function pageFetcher(endpoint) {
 }
 
 async function blockFetcher(endpoint, id) {
-	const response = await fetch(endpoint + "?id=" + id);
+	const response = await fetch(endpoint + "?ids=" + id);
 	const json = await response.json();
 
 	return json;
@@ -35,7 +35,7 @@ export default function Home() {
 
 	const loadPage = (id) => {
 		setStatus("loading");
-		fetch(BLOCK_ENDPOINT + "?id=" + id)
+		fetch(BLOCK_ENDPOINT + "?ids=" + id)
 			.then((res) => res.json())
 			.then((json) => {
 				setBlockData(json);
