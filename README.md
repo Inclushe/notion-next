@@ -21,8 +21,10 @@ bun dev
   - [x] Parallelize with Promise.all
   - Load maybe 25 at a time
     - Loading 100 took 5 seconds
-- Store block/page data in object with page ID as key
-  - mock/getPageData has first 100 results
-- Render all images for all pages
-- Use fetch for now. SWR can wait
+- [x] Store block/page data in object with page ID as key
+  - [x] mock/getPageData has first 100 results
+- [x] Render all images for all pages
+- [x] Use fetch for now. SWR can wait
 - Handle pagination when page_data has next_cursor
+- If rate limited, wait for Retry-After seconds
+  - https://developers.notion.com/reference/request-limits
