@@ -10,6 +10,7 @@ const BLOCK_ENDPOINT = "/api/notion/mock/getPageData";
 
 export default function Home() {
 	const [count, setCount] = React.useState(0);
+	const [pageJSON, setPageJSON] = React.useState(null);
 	const [pageData, setPageData] = React.useState(null);
 	const [blockData, setBlockData] = React.useState(null);
 	const [blockContents, setBlockContents] = React.useState({});
@@ -18,6 +19,10 @@ export default function Home() {
 	React.useEffect(() => {
 		loadPage();
 	}, []);
+
+	React.useEffect(() => {
+		console.log(pageJSON);
+	}, [pageJSON]);
 
 	React.useEffect(() => {
 		if (!pageData) return;
@@ -30,7 +35,7 @@ export default function Home() {
 		fetch(PAGE_ENDPOINT)
 			.then((res) => res.json())
 			.then((json) => {
-				// console.log(json);
+				setPageJSON(json);
 				setPageData(json.response);
 				setStatus("loaded");
 			})

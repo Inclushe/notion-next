@@ -16,6 +16,8 @@ bun dev
 
 ## Notes
 
+### Done
+
 - https://github.com/NotionX/react-notion-x
 - [x] Grab page data for multiple IDs
   - [x] Parallelize with Promise.all
@@ -25,6 +27,12 @@ bun dev
   - [x] mock/getPageData has first 100 results
 - [x] Render all images for all pages
 - [x] Use fetch for now. SWR can wait
+
+### Doing
+
 - Handle pagination when page_data has next_cursor
+  - Load when bottom of page is reached
+- Save data and images to local storage
+
 - If rate limited, wait for Retry-After seconds
   - https://developers.notion.com/reference/request-limits
