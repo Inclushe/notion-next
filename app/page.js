@@ -4,6 +4,8 @@ import Image from "next/image";
 import React from "react";
 import useSWR from "swr";
 
+import NotionCard from "@/components/NotionCard";
+
 const PAGE_ENDPOINT = "/api/notion/mock";
 // const BLOCK_ENDPOINT = "/api/notion/getPageData";
 const BLOCK_ENDPOINT = "/api/notion/mock/getPageData";
@@ -88,39 +90,6 @@ export default function Home() {
 					))}
 				</ul>
 			</div>
-		</>
-	);
-}
-
-export function NotionCard({ page, contents }) {
-	// Where in properties has a named object with the id of 'title'
-	const titleObject = Object.values(page?.properties).find(
-		(prop) => prop?.id === "title",
-	);
-	const title = titleObject?.title?.[0]?.plain_text;
-	return (
-		<li className="bg-white shadow-sm rounded p-4" key={page.id}>
-			<ul className="grid grid-cols-2 grid-rows-2 gap-2 mb-4">
-				{contents?.map((block) => (
-					<li key={block.id}>
-						<NotionImage block={block} />
-					</li>
-				))}
-			</ul>
-			<p className="font-bold">{title}</p>
-		</li>
-	);
-}
-
-export function NotionImage({ block }) {
-	return (
-		<>
-			{block.type === "image" && (
-				<img
-					src={block?.image?.external?.url || block?.image?.file?.url}
-					alt={block?.title}
-				/>
-			)}
 		</>
 	);
 }

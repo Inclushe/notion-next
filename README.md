@@ -32,6 +32,7 @@ bun dev
 
 - Handle pagination when page_data has next_cursor
   - Load when bottom of page is reached
+  - Use intersection observer from https://courses.joshwcomeau.com/joy-of-react/07-framer-motion/02.01-basics-exercises#springy-toasty
 - Save data and images to local storage
 
 - If rate limited, wait for Retry-After seconds
