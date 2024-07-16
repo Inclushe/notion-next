@@ -2,27 +2,35 @@
 
 import React from "react";
 import NotionCard from "@/components/NotionCard";
+import useElementOnScreen from "@/hooks/useElementOnScreen";
 
 const DATABASE_ID = "cbdf16ae344e4c83b16f94b5e6be36ca";
-const FILTER = {
-	and: [
-		{
-			property: "Author",
-			rich_text: {
-				contains: "sonylogos",
-			},
-		},
-		{
-			property: "Tags",
-			multi_select: {
-				does_not_contain: "Hide",
-			},
-		},
-	],
-};
+// const FILTER = {
+// 	and: [
+// 		{
+// 			property: "Author",
+// 			rich_text: {
+// 				contains: "sonylogos",
+// 			},
+// 		},
+// 		{
+// 			property: "Tags",
+// 			multi_select: {
+// 				does_not_contain: "Hide",
+// 			},
+// 		},
+// 	],
+// };
+const FILTER = undefined;
+// const SORTS = [
+// 	{
+// 		property: "Tweet Posted At",
+// 		direction: "descending",
+// 	},
+// ];
 const SORTS = [
 	{
-		property: "Tweet Posted At",
+		property: "Created",
 		direction: "descending",
 	},
 ];
@@ -35,6 +43,11 @@ export default function Page() {
 	const [blockContents, setBlockContents] = React.useState({});
 	const [status, setStatus] = React.useState("loaded");
 	const [hasMore, setHasMore] = React.useState(true);
+	const [skeletonRef, skeletonIsVisible] = useElementOnScreen({
+		root: null,
+		rootMargin: "0px",
+		threshold: 0.5,
+	});
 
 	const loadBlocks = (ids) => {
 		setBlockContents((blockContents) => {
@@ -62,7 +75,17 @@ export default function Page() {
 				});
 			})
 			.catch((e) => {
-				console.error(e);
+				// Remove blocks from blockContents
+				setBlockContents((blockContents) => {
+					const newBlockContents = {};
+					Object.keys(blockContents).forEach((key) => {
+						if (ids.includes(key)) {
+							return;
+						}
+						newBlockContents[key] = blockContents[key];
+					});
+					return newBlockContents;
+				});
 			});
 	};
 
@@ -92,13 +115,19 @@ export default function Page() {
 				setHasMore(json?.response?.has_more);
 			})
 			.catch((e) => {
-				console.error(e);
+				setStatus("loaded");
 			});
 	};
 
 	React.useEffect(() => {
 		queryDatabase();
 	}, []);
+
+	React.useEffect(() => {
+		if (skeletonIsVisible && status === "loaded") {
+			queryDatabase();
+		}
+	}, [skeletonIsVisible]);
 
 	return (
 		<div className="flex flex-col items-center bg-[#CCCDC8] min-h-screen">
@@ -120,8 +149,9 @@ export default function Page() {
 					onClick={() => {
 						status === "loaded" && queryDatabase();
 					}}
-					className="p-4 bg-gray-200 border-1 border-gray-300 rounded-md disabled:bg-gray-300 disabled:text-gray-500"
+					className="px-4 py-32 bg-gray-200 border-1 border-gray-300 rounded-md disabled:bg-gray-300 disabled:text-gray-500"
 					disabled={status === "loading"}
+					ref={skeletonRef}
 				>
 					{status === "loading" ? "Loading..." : "Load More"}
 				</button>
